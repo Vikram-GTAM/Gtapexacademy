@@ -1,0 +1,60 @@
+# Supabase CLI settings for GTapex Academy. `supabase link` + `supabase config push` applies the [auth] part to
+# the hosted project; `supabase start` uses all of it for a local copy (needs Docker).
+project_id = "gtapex-academy"
+
+[api]
+enabled = true
+port = 54321
+# Only the public schema is reachable through the API. Helpers live in `private`, which is never exposed.
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 15
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[auth]
+enabled = true
+# Change to the live address (e.g. https://academy.gtapexmarketing.com) before going live.
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173/reset-password"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+enable_signup = true
+# Same rule as the old backend: at least 8 characters, letters and numbers.
+minimum_password_length = 8
+password_requirements = "letters_digits"
+
+[auth.email]
+enable_signup = true
+# Students must click the email link before they can log in. Their profile is created at that moment.
+enable_confirmations = true
+double_confirm_changes = true
+secure_password_change = false
+
+# The reset link carries a one-time token the website exchanges itself, so it also works when the email is opened
+# on a different device from the one that asked for it.
+[auth.email.template.recovery]
+subject = "Reset your GTapex Academy password"
+content_path = "./supabase/templates/recovery.html"
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
+
+# Both functions check the caller themselves (the payments config call must work for visitors, and Razorpay's
+# webhook has no Supabase login), so the gateway's JWT check is off.
+[functions.payments]
+verify_jwt = false
+
+[functions.razorpay-webhook]
+verify_jwt = false
+
+# Called by a Database Webhook, which proves itself with the x-webhook-secret header.
+[functions.enquiry-alert]
+verify_jwt = false

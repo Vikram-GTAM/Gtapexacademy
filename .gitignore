@@ -1,0 +1,16 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Generated
+node_modules/
+dist/
+__pycache__/
+*.pyc
+.venv/
+
+# Backups can contain secrets and student data
+backups/
+*.zip
+*.dump
