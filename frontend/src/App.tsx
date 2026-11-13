@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { RouteMeta } from "./components/RouteMeta";
 import { ScrollToTop } from "./components/ScrollToTop";
@@ -133,6 +134,7 @@ export default function App() {
           <ErrorBoundary resetKey="krish"><Suspense fallback={null}><Krish /></Suspense></ErrorBoundary>
         </AuthProvider>
       </ToastProvider>
+      <SpeedInsights />
     </BrowserRouter>
   );
 }
